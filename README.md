@@ -27,4 +27,6 @@ npm start
 
 ## Publicar na Vercel
 
-Importe este repositório na Vercel e selecione o framework Next.js. Use a raiz do repositório como diretório do projeto e mantenha os comandos padrão (`npm run build`). A versão do Node.js está definida em `package.json` como 24.x. Não são necessárias variáveis de ambiente, banco de dados ou chaves de API.
+Importe este repositório na Vercel e use a raiz do repositório como diretório do projeto. O arquivo `vercel.json` define o framework Next.js, o comando `npm run build` e o diretório de saída `.next`, substituindo configurações de site estático como `public`. A versão do Node.js está definida em `package.json` como 24.x. Não são necessárias variáveis de ambiente, banco de dados ou chaves de API.
+
+Se houver um deploy anterior com erro, publique o commit mais recente da branch `main`; repetir um deploy antigo não inclui a nova configuração.
