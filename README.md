@@ -6,7 +6,7 @@ Página única em Next.js com App Router, JavaScript e CSS simples. O botão **A
 
 Use Node.js 24 e npm.
 
-Copie `.env.example` para `.env.local` e preencha `NEXT_PUBLIC_SUPABASE_URL` e `NEXT_PUBLIC_SUPABASE_ANON_KEY`. Use a chave pública (anon ou publishable), nunca uma chave secreta ou `service_role`. Se você já tem `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, use o mesmo valor no novo nome `NEXT_PUBLIC_SUPABASE_ANON_KEY`. Arquivos `.env.local` não são enviados ao GitHub.
+Copie `.env.example` para `.env.local` e preencha `NEXT_PUBLIC_SUPABASE_URL` e `NEXT_PUBLIC_SUPABASE_ANON_KEY`. Também aceitamos `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` como alternativa: se já usa esse nome, não precisa renomear. Quando as duas chaves estiverem presentes, `NEXT_PUBLIC_SUPABASE_ANON_KEY` tem prioridade. Use uma chave pública (anon ou publishable), nunca uma chave secreta ou `service_role`. Arquivos `.env.local` não são enviados ao GitHub.
 
 ```sh
 npm ci
@@ -31,7 +31,7 @@ npm start
 
 Importe este repositório na Vercel e use a raiz do repositório como diretório do projeto. O arquivo `vercel.json` define o framework Next.js, o comando `npm run build` e o diretório de saída `.next`, substituindo configurações de site estático como `public`. A versão do Node.js está definida em `package.json` como 24.x.
 
-Adicione `NEXT_PUBLIC_SUPABASE_URL` e `NEXT_PUBLIC_SUPABASE_ANON_KEY` às variáveis da Vercel nos ambientes desejados e publique novamente. A chave antes configurada como `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` precisa estar também no nome `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
+Adicione `NEXT_PUBLIC_SUPABASE_URL` e uma chave pública com o nome `NEXT_PUBLIC_SUPABASE_ANON_KEY` **ou** `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` às variáveis da Vercel nos ambientes desejados (incluindo Production para o domínio público) e publique novamente. Se as variáveis já estiverem cadastradas com o nome publishable, apenas publique o commit mais recente. Sem URL ou chave, os botões ficam desabilitados e uma mensagem em português indica que o login está indisponível. Os valores `NEXT_PUBLIC_` são incorporados à compilação; alterar variáveis exige um novo deploy.
 
 Se houver um deploy anterior com erro, publique o commit mais recente da branch `main`; repetir um deploy antigo não inclui a nova configuração.
 

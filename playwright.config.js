@@ -23,7 +23,9 @@ export default defineConfig({
       reuseExistingServer: false,
       env: {
         NEXT_PUBLIC_SUPABASE_URL: "http://127.0.0.1:54329",
-        NEXT_PUBLIC_SUPABASE_ANON_KEY: "public-test-key",
+        // Reproduz o ambiente da Vercel com apenas o nome publishable.
+        NEXT_PUBLIC_SUPABASE_ANON_KEY: "",
+        NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: "public-test-key",
         NEXT_TELEMETRY_DISABLED: "1",
       },
     },

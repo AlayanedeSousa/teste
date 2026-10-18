@@ -12,7 +12,7 @@ export default async function LoginPage({ searchParams }) {
   try {
     getSupabaseConfig();
   } catch {
-    configurationError = "O login ainda não foi configurado. Defina NEXT_PUBLIC_SUPABASE_URL e NEXT_PUBLIC_SUPABASE_ANON_KEY no ambiente e publique novamente.";
+    configurationError = "O login está temporariamente indisponível. Tente novamente mais tarde.";
   }
   if (!configurationError) {
     try {
