@@ -9,6 +9,7 @@
   --accent-hover: #194735;
   --on-accent: #ffffff;
   --focus: #38795f;
+  --error: #9f1239;
 }
 
 * {
@@ -59,15 +60,19 @@ h2 {
   font-weight: 700;
 }
 
-textarea {
+textarea,
+input {
   width: 100%;
-  min-height: 180px;
   padding: 18px;
   border: 1px solid var(--border);
   border-radius: 12px;
   background: var(--surface);
   color: var(--text);
   font: inherit;
+}
+
+textarea {
+  min-height: 180px;
   resize: vertical;
 }
 
@@ -93,6 +98,7 @@ button:hover {
 }
 
 textarea:focus-visible,
+input:focus-visible,
 button:focus-visible {
   outline: 3px solid var(--focus);
   outline-offset: 3px;
@@ -100,6 +106,62 @@ button:focus-visible {
 
 .response-section {
   margin-top: 36px;
+}
+
+.login-page {
+  max-width: 600px;
+}
+
+.form-buttons,
+.account-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.account-section {
+  margin-bottom: 36px;
+}
+
+.account-bar {
+  justify-content: space-between;
+}
+
+.account-email {
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+
+.secondary-button {
+  background: var(--surface);
+  color: var(--accent);
+  border: 1px solid var(--accent);
+}
+
+.secondary-button:hover {
+  background: var(--background);
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.form-hint {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+
+.form-error {
+  color: var(--error);
+  margin: 0;
+}
+
+.form-message {
+  color: var(--accent);
+  margin: 0;
 }
 
 h2 {

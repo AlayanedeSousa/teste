@@ -1,43 +1,24 @@
-"use client";
+import { redirect } from "next/navigation";
+import { createClient } from "../lib/supabase/server";
+import AccountMenu from "./components/account-menu";
+import TextAnalyzer from "./components/text-analyzer";
 
-import { useState } from "react";
-import { content } from "./content";
+export const dynamic = "force-dynamic";
 
-export default function Home() {
-  const [text, setText] = useState("");
-  const [response, setResponse] = useState("");
-
-  function handleSubmit(event) {
-    event.preventDefault();
-    setResponse(text);
+export default async function Home() {
+  let user;
+  try {
+    const supabase = await createClient();
+    const { data, error } = await supabase.auth.getUser();
+    if (!error) user = data.user;
+  } catch {
+    // Sem sessão validada, o conteúdo protegido nunca é renderizado.
   }
-
+  if (!user) redirect("/login");
   return (
     <main className="page">
-      <header className="intro">
-        <h1>{content.title}</h1>
-        <p>{content.description}</p>
-      </header>
-
-      <form className="text-form" onSubmit={handleSubmit}>
-        <label htmlFor="text">{content.inputLabel}</label>
-        <textarea
-          id="text"
-          name="text"
-          rows={6}
-          placeholder={content.placeholder}
-          value={text}
-          onChange={(event) => setText(event.target.value)}
-        />
-        <button type="submit">{content.button}</button>
-      </form>
-
-      <section className="response-section" aria-labelledby="response-title">
-        <h2 id="response-title">{content.responseTitle}</h2>
-        <div className="response" role="status" aria-live="polite" aria-atomic="true">
-          {response}
-        </div>
-      </section>
+      <AccountMenu email={user.email} />
+      <TextAnalyzer />
     </main>
   );
 }
