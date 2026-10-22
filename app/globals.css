@@ -58,7 +58,8 @@ h1 {
   font-size: 1.125rem;
 }
 
-.text-form {
+.text-form,
+.analysis-field {
   display: flex;
   flex-direction: column;
   gap: 12px;

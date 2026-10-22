@@ -9,7 +9,7 @@ test("protege a página principal e não aceita cookie inventado", async ({ page
   await context.addCookies([{ name: "sb-127-auth-token", value: "sessao-inventada", domain: "127.0.0.1", path: "/" }]);
   await page.goto("/");
   await expect(page).toHaveURL(/\/login$/);
-  await expect(page.getByRole("button", { name: "Analisar", exact: true })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "Analisar mensagem", exact: true })).toHaveCount(0);
 });
 
 test("valida campos e traduz credenciais inválidas", async ({ page }) => {
@@ -32,9 +32,10 @@ test("entra, mantém sessão no recarregamento, analisa e sai", async ({ page })
   await expect(page.getByText("lay@example.com", { exact: true })).toBeVisible();
   await page.reload();
   await expect(page.getByRole("button", { name: "Sair", exact: true })).toBeVisible();
-  await page.getByLabel("Seu texto", { exact: true }).fill("Olá!\nMeu texto.");
-  await page.getByRole("button", { name: "Analisar", exact: true }).click();
-  await expect(page.getByRole("status")).toHaveText("Olá!\nMeu texto.");
+  await page.getByLabel("Cole aqui a mensagem que você recebeu", { exact: true }).fill("Olá!\nMeu texto.");
+  await page.getByRole("button", { name: "Analisar mensagem", exact: true }).click();
+  await expect(page.getByRole("status")).toContainText("VEREDITO: SUSPEITO");
+  await expect(page.getByRole("status")).toContainText("modo de teste");
   await page.goto("/login");
   await expect(page).toHaveURL("http://127.0.0.1:3100/");
   await page.getByRole("button", { name: "Sair", exact: true }).click();

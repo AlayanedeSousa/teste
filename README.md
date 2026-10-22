@@ -1,6 +1,6 @@
 # Analisador de texto
 
-Página única em Next.js com App Router, JavaScript e CSS simples. O botão **Analisar** mostra exatamente o texto digitado, preservando espaços e quebras de linha. A resposta começa vazia e só muda ao enviar o formulário.
+Projeto Next.js com App Router, JavaScript, Supabase Auth e CSS simples. A página principal é montada a partir de `desafio.js` e envia os campos para `POST /api/ia`. A resposta preserva as quebras de linha.
 
 ## Desenvolvimento
 
@@ -22,10 +22,21 @@ npm start
 
 ## Personalização
 
-- Textos e metadados: `app/content.js`.
+- Título, subtítulo, campos, botão, aviso, prompt, modelo e modo de teste da análise: `desafio.js`.
+- Textos do login e metadados do site: `app/content.js`.
 - Cores: variáveis no início de `app/globals.css`.
 - Layout e estilos: `app/globals.css`.
-- Comportamento do botão: `app/page.js`.
+- Comportamento do botão: `app/components/text-analyzer.js`.
+
+## Análise de mensagens
+
+`desafio.js` está com `modoTeste: true`: a API devolve um exemplo claramente identificado, sem chamar a IA e sem precisar de chave OpenRouter. O botão exibe “Analisando...” e fica desabilitado enquanto aguarda a resposta.
+
+Para usar a IA real, defina `modoTeste: false`, configure `OPENROUTER_API_KEY` apenas no servidor (na Vercel ou em `.env.local`) e publique novamente. Nunca use prefixo `NEXT_PUBLIC_` nessa chave. A API exige uma sessão Supabase válida, interpola apenas os campos definidos no desafio e usa `https://openrouter.ai/api/v1/chat/completions` com o modelo do arquivo e `max_tokens: 900`. A comunicação externa exige acesso ao domínio `openrouter.ai`.
+
+`POST /api/ia` recebe um objeto JSON com uma string para cada id de campo, por exemplo `{"mensagem":"Texto recebido"}`, e responde com texto puro. Erros 429 e 401 mostram as mensagens de limite e chave inválida solicitadas; uma sessão ausente retorna 403 com instrução para entrar. Campos vazios ou acima de 20.000 caracteres retornam 400.
+
+O aviso foi mantido exatamente como fornecido. **Ainda não há persistência ou histórico:** apesar do trecho do aviso sobre guardar dados na conta, as mensagens e respostas ficam apenas no estado da página. No modo real, a mensagem é enviada à OpenRouter para processamento. O armazenamento privado requer uma implementação separada no Supabase com políticas de acesso.
 
 ## Publicar na Vercel
 
