@@ -47,8 +47,9 @@ createServer(async (request, response) => {
     if (!currentUser) return send(403, { code: "42501", message: "Permission denied" });
     if (request.method === "POST") {
       if (failWrite) return send(503, { message: "Simulated write failure" });
-      if (body.user_id !== currentUser.id) return send(403, { code: "42501", message: "Row security violation" });
-      records.push({ ...body, id: nextId++, created_at: new Date().toISOString() });
+      const owner = Object.hasOwn(body, "user_id") ? body.user_id : currentUser.id;
+      if (owner !== currentUser.id) return send(403, { code: "42501", message: "Row security violation" });
+      records.push({ ...body, user_id: owner, id: nextId++, created_at: new Date().toISOString() });
       return send(201, null);
     }
     if (failRead) return send(503, { message: "Simulated read failure" });

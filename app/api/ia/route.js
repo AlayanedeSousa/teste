@@ -15,12 +15,10 @@ function textResponse(text, status = 200) {
 
 export async function POST(request) {
   let supabase;
-  let user;
   try {
     supabase = await createClient();
     const { data, error } = await supabase.auth.getUser();
     if (error || !data.user) return textResponse("Sua sessão expirou. Entre novamente para analisar uma mensagem.", 403);
-    user = data.user;
   } catch {
     return textResponse("Não foi possível verificar sua sessão. Entre novamente e tente outra vez.", 503);
   }
@@ -35,7 +33,7 @@ export async function POST(request) {
     const resposta = await analyze(desafio, values, process.env.OPENROUTER_API_KEY);
     try {
       const { error } = await supabase.from("respostas").insert({
-        user_id: user.id,
+        // O default auth.uid() no banco preenche user_id usando esta sessão.
         entrada: formatEntry(desafio.campos, values),
         resposta,
       });

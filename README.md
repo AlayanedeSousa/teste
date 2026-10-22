@@ -36,7 +36,7 @@ Para usar a IA real, defina `modoTeste: false`, configure `OPENROUTER_API_KEY` a
 
 `POST /api/ia` recebe um objeto JSON com uma string para cada id de campo, por exemplo `{"mensagem":"Texto recebido"}`, e responde com texto puro. Erros 429 e 401 mostram as mensagens de limite e chave inválida solicitadas; uma sessão ausente retorna 403 com instrução para entrar. Campos vazios ou acima de 20.000 caracteres retornam 400.
 
-As análises são salvas na tabela `respostas`, com a sessão Supabase da pessoa logada. `entrada` reúne cada campo com seu rótulo e `resposta` recebe o texto retornado. `user_id` vem do usuário validado no servidor, nunca do formulário. O modo de teste também salva seus exemplos. Uma falha de gravação é informada em português; a API só confirma sucesso depois do salvamento. No modo real, a mensagem também é enviada à OpenRouter para processamento.
+As análises são salvas na tabela `respostas`, com a sessão Supabase da pessoa logada. `entrada` reúne cada campo com seu rótulo e `resposta` recebe o texto retornado. A inserção envia apenas essas duas colunas: o default `auth.uid()` do banco preenche `user_id` automaticamente pela sessão, e as políticas RLS impedem acesso ou gravação em nome de outra pessoa. O modo de teste também salva seus exemplos. Uma falha de gravação é informada em português; a API só confirma sucesso depois do salvamento. No modo real, a mensagem também é enviada à OpenRouter para processamento.
 
 ## Histórico privado no Supabase
 
