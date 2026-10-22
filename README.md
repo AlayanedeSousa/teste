@@ -36,7 +36,17 @@ Para usar a IA real, defina `modoTeste: false`, configure `OPENROUTER_API_KEY` a
 
 `POST /api/ia` recebe um objeto JSON com uma string para cada id de campo, por exemplo `{"mensagem":"Texto recebido"}`, e responde com texto puro. Erros 429 e 401 mostram as mensagens de limite e chave inválida solicitadas; uma sessão ausente retorna 403 com instrução para entrar. Campos vazios ou acima de 20.000 caracteres retornam 400.
 
-O aviso foi mantido exatamente como fornecido. **Ainda não há persistência ou histórico:** apesar do trecho do aviso sobre guardar dados na conta, as mensagens e respostas ficam apenas no estado da página. No modo real, a mensagem é enviada à OpenRouter para processamento. O armazenamento privado requer uma implementação separada no Supabase com políticas de acesso.
+As análises são salvas na tabela `respostas`, com a sessão Supabase da pessoa logada. `entrada` reúne cada campo com seu rótulo e `resposta` recebe o texto retornado. `user_id` vem do usuário validado no servidor, nunca do formulário. O modo de teste também salva seus exemplos. Uma falha de gravação é informada em português; a API só confirma sucesso depois do salvamento. No modo real, a mensagem também é enviada à OpenRouter para processamento.
+
+## Histórico privado no Supabase
+
+Antes de publicar esta funcionalidade, execute o conteúdo de `supabase/migrations/202610220001_respostas.sql` no **SQL Editor** do projeto Supabase. O script pode ser executado novamente: cria `respostas` se necessário e acrescenta colunas que faltarem em uma tabela existente. O esquema esperado tem `id`, `user_id` (UUID), `entrada` (texto), `resposta` (texto) e `created_at` (timestamp com fuso).
+
+O script preserva os dados existentes. Não inventa dono nem data para registros antigos sem essas informações: registros sem `user_id` não aparecem para usuários até que o dono correto seja identificado por uma pessoa administradora. Não atribua todos os registros a uma conta para contornar isso.
+
+A migração ativa Row Level Security e cria políticas de leitura e inserção por `auth.uid() = user_id`, inclusive uma política restritiva para impedir acesso cruzado mesmo se houver políticas permissivas antigas. O aplicativo usa somente a chave pública e os cookies da sessão, sem `service_role` ou chave administrativa. Se a tabela existente usar nomes/tipos diferentes, adapte o esquema antes do deploy; a migração não converte dados automaticamente.
+
+`/historico` exige login e consulta apenas os registros do usuário, com os mais recentes primeiro, em páginas de 20. A data e a hora são exibidas no fuso `America/Sao_Paulo` (Brasília). O topo tem o link “Meu histórico” ao lado de “Sair”.
 
 ## Publicar na Vercel
 
@@ -53,7 +63,7 @@ Se houver um deploy anterior com erro, publique o commit mais recente da branch 
 - O topo da página mostra o e-mail e o botão Sair. A sessão usa cookies e é renovada pelo proxy do Next.js.
 - Em Supabase → Authentication, habilite o provedor Email e a criação de contas. Se a confirmação de e-mail estiver ativa, o cadastro exibe uma instrução para conferir a caixa de entrada.
 - Em Authentication → URL Configuration, defina **Site URL** como o endereço público do site. Adicione `https://SEU-DOMINIO/auth/callback` às **Redirect URLs**, além de `http://localhost:3000/auth/callback` para desenvolvimento local. A confirmação deve ser aberta no mesmo navegador que iniciou o cadastro para concluir o fluxo PKCE. Depois de confirmar, também é possível voltar a `/login` e entrar com a senha.
-- Não é necessária uma tabela de perfis nem uma chave administrativa. Textos e respostas continuam apenas no estado da página.
+- Não é necessária uma tabela de perfis nem uma chave administrativa. A tabela `respostas` guarda as análises privadas após a migração descrita acima.
 
 ## Testes
 

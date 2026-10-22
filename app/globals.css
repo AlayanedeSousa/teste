@@ -124,7 +124,9 @@ button:focus-visible {
 }
 
 .form-buttons,
-.account-bar {
+.account-bar,
+.account-actions,
+.history-pagination {
   display: flex;
   align-items: center;
   gap: 12px;
@@ -187,6 +189,51 @@ h2 {
   background: var(--response-surface);
   white-space: pre-wrap;
   overflow-wrap: anywhere;
+}
+
+a {
+  color: var(--text);
+  text-underline-offset: 4px;
+}
+
+a:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
+}
+
+.history-list {
+  display: grid;
+  gap: 20px;
+}
+
+.history-card {
+  padding: 24px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+  min-width: 0;
+}
+
+.history-card time {
+  display: block;
+  margin-bottom: 20px;
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+
+.history-text {
+  margin: 0 0 24px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.history-text:last-child {
+  margin-bottom: 0;
+}
+
+.history-pagination {
+  justify-content: space-between;
+  margin-top: 24px;
 }
 
 @media (max-width: 480px) {

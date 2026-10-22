@@ -4,4 +4,4 @@ export async function proxy(request) {
   return updateSession(request);
 }
 
-export const config = { matcher: ["/", "/login", "/auth/callback"] };
+export const config = { matcher: ["/", "/login", "/historico", "/api/ia", "/auth/callback"] };
