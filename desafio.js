@@ -18,6 +18,6 @@ REGRAS
 - Pedido de senha, código, Pix ou dado de cartão é sinal forte de golpe.
 - Sem informação suficiente, diga SUSPEITO e explique o que falta.
 - Nunca repita os links da mensagem.
-- Máximo 200 palavras. Português simples.
+- Máximo 80 palavras. Português simples.
 MENSAGEM: {mensagem}`
 };
