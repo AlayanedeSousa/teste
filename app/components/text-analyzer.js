@@ -83,8 +83,16 @@ export default function TextAnalyzer() {
         <section className="response-section" aria-labelledby="response-title" aria-busy={pending}>
           <h2 id="response-title"><span className="section-icon"><Icon name="message" /></span>Resposta</h2>
           {pending && <div className="response-progress" aria-hidden="true"><span /><span /><span /></div>}
-          <div className="response" role="status" aria-live="polite" aria-atomic="true">
-            {response}
+          <div className="response-body">
+            <div className="response" role="status" aria-live="polite" aria-atomic="true">
+              {response}
+            </div>
+            {!response && !pending && (
+              <div className="response-placeholder" aria-hidden="true">
+                <span className="placeholder-icon"><Icon name="message" /></span>
+                <span className="placeholder-lines"><span /><span /><span /></span>
+              </div>
+            )}
           </div>
         </section>
       </div>
