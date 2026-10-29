@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { desafio } from "../../desafio";
+import Icon from "./ui-icon";
 
 export default function TextAnalyzer() {
   const [values, setValues] = useState(() => Object.fromEntries(desafio.campos.map(field => [field.id, ""])));
@@ -41,37 +42,52 @@ export default function TextAnalyzer() {
 
   return (
     <>
-      <header className="intro">
-        <h1>{desafio.nome}</h1>
-        <p>{desafio.subtitulo}</p>
+      <header className="intro analysis-intro">
+        <div className="intro-copy">
+          <h1>{desafio.nome}</h1>
+          <p>{desafio.subtitulo}</p>
+        </div>
+        <div className="hero-art" aria-hidden="true">
+          <span className="hero-orbit" />
+          <span className="hero-shield"><Icon name="shield" /></span>
+          <span className="hero-bubble"><Icon name="message" /></span>
+          <span className="hero-sparkle"><Icon name="sparkle" /></span>
+        </div>
       </header>
 
-      <form className="text-form" onSubmit={handleSubmit} aria-busy={pending} noValidate>
-        {desafio.campos.map(field => (
-          <div className="analysis-field" key={field.id}>
-            <label htmlFor={field.id}>{field.rotulo}</label>
-            <textarea
-              id={field.id}
-              name={field.id}
-              rows={field.linhas}
-              value={values[field.id] || ""}
-              onChange={event => setValues(current => ({ ...current, [field.id]: event.target.value }))}
-              required
-              maxLength={20000}
-            />
-          </div>
-        ))}
-        <button type="submit" disabled={pending}>{pending ? "Analisando..." : desafio.botao}</button>
-        <p className="form-hint">{desafio.aviso}</p>
-        {error && <p className="form-error" role="alert">{error}</p>}
-      </form>
+      <div className="analysis-grid">
+        <form className="text-form" onSubmit={handleSubmit} aria-busy={pending} noValidate>
+          {desafio.campos.map(field => (
+            <div className="analysis-field" key={field.id}>
+              <label htmlFor={field.id}>{field.rotulo}</label>
+              <textarea
+                id={field.id}
+                name={field.id}
+                rows={field.linhas}
+                value={values[field.id] || ""}
+                onChange={event => setValues(current => ({ ...current, [field.id]: event.target.value }))}
+                required
+                maxLength={20000}
+              />
+            </div>
+          ))}
+          <button type="submit" disabled={pending}>
+            {pending ? <span className="spinner" aria-hidden="true" /> : <Icon name="sparkle" />}
+            {pending ? "Analisando..." : desafio.botao}
+            {!pending && <Icon name="arrow" />}
+          </button>
+          <p className="form-hint">{desafio.aviso}</p>
+          {error && <p className="form-error" role="alert">{error}</p>}
+        </form>
 
-      <section className="response-section" aria-labelledby="response-title">
-        <h2 id="response-title">Resposta</h2>
-        <div className="response" role="status" aria-live="polite" aria-atomic="true">
-          {response}
-        </div>
-      </section>
+        <section className="response-section" aria-labelledby="response-title" aria-busy={pending}>
+          <h2 id="response-title"><span className="section-icon"><Icon name="message" /></span>Resposta</h2>
+          {pending && <div className="response-progress" aria-hidden="true"><span /><span /><span /></div>}
+          <div className="response" role="status" aria-live="polite" aria-atomic="true">
+            {response}
+          </div>
+        </section>
+      </div>
     </>
   );
 }

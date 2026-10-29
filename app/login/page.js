@@ -3,6 +3,7 @@ import { createClient } from "../../lib/supabase/server";
 import { getSupabaseConfig } from "../../lib/supabase/config";
 import { content } from "../content";
 import LoginForm from "./login-form";
+import Icon from "../components/ui-icon";
 
 export const metadata = { title: `Entrar | ${content.siteTitle}` };
 
@@ -31,6 +32,7 @@ export default async function LoginPage({ searchParams }) {
   return (
     <main className="page login-page">
       <header className="intro">
+        <span className="brand-mark login-brand-mark"><Icon name="shield" /></span>
         <h1>{content.title}</h1>
         <p>Entre ou crie sua conta para usar o corretor.</p>
       </header>
